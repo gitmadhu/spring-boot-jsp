@@ -19,6 +19,6 @@ public class MainController {
     @RequestMapping(value="/test")
     public String hello(Model model){
     	model.addAttribute("hello", "Mr Madhu");
-    	return "test2.jsp";
+    	return "test2";
     }
 }
