@@ -1,6 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html lang="en" ng-app="app" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html lang="en" ng-app="app" class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -22,18 +23,59 @@
 	      <div class="container">
 	        <nav class="blog-nav">
 	          <a class="blog-nav-item active" href="#">Home</a>
-	          <a class="blog-nav-item" href="#">New features</a>
+	          <a class="blog-nav-item" href="/notes">New features</a>
 	          <a class="blog-nav-item" href="#">Press</a>
 	          <a class="blog-nav-item" href="#">New hires</a>
 	          <a class="blog-nav-item" href="#">About</a>
+	          <ul class="nav navbar-nav navbar-right ">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span> 
+                        <strong><sec:authentication property="principal.user.firstname" /></strong>
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                     <ul class="dropdown-menu">
+                        <li>
+                            <div class="navbar-login">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <p class="text-center">
+                                            <span class="glyphicon glyphicon-user icon-size"></span>
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <p class="text-left"><strong><sec:authentication property="principal.user.firstname" /> <sec:authentication property="principal.user.lastname" /></strong></p>
+                                        <p class="text-left small"><sec:authentication property="principal.user.email" /></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="navbar-login navbar-login-session">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <p>
+                                            <a class="btn btn-danger btn-block" onClick="$('#logoutForm' ).submit()" href="#">logout</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul> 
+                </li>
+            </ul>
 	        </nav>
 	      </div>
 	    </div>
 		<div class="container">
 			<div class="blog-header">
-	        <h1 class="blog-title">Spring boot jsp View</h1>
+	        <h1 class="blog-title">Spring boot jsp View </h1>
 	        <p class="lead blog-description">An example application with spring boot, mysql , jsp view and with bootstrap</p>
 	      </div>
+      		<form id="logoutForm" method="post" action="/logout" class="form-horizontal" role="form">
+					 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+			</form>
 			<div class="col-sm-8 blog-main">
 		 	<div class="panel panel-primary">
 		    	<div class="panel-heading">Registered Users</div>

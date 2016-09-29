@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface NoteRepository extends JpaRepository<Note, Long> {
 
-	Optional<User> findOneByEmail(String email);
+	Optional<Note> findAllByCategory(String category);
 }
