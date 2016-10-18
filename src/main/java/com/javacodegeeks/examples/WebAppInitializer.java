@@ -1,7 +1,5 @@
 package com.javacodegeeks.examples;
 
-import java.util.Calendar;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -11,11 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.javacodegeeks.examples.model.City;
-import com.javacodegeeks.examples.model.User;
 import com.javacodegeeks.examples.model.CityRepository;
 import com.javacodegeeks.examples.model.Note;
 import com.javacodegeeks.examples.model.NoteRepository;
+import com.javacodegeeks.examples.model.User;
 import com.javacodegeeks.examples.model.UserRepository;
+import com.javacodegeeks.examples.service.ReadTodoFileService;
 
 
 @SpringBootApplication
@@ -36,10 +35,8 @@ public class WebAppInitializer{
 			
 			final String content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate, voluptates, voluptas dolore ipsam cumque quam veniam accusantium laudantium adipisci architecto itaque dicta aperiam maiores provident id incidunt autem. Magni, ratione";
 			
-			noteRepo.save(new Note("Blog Post Title 1", "madhu", Calendar.getInstance().getTime(), content));
-			
-			noteRepo.save(new Note("Blog Post Title 2", "madhu", Calendar.getInstance().getTime(), content));
-			noteRepo.save(new Note("Blog Post Title 3", "madhu", Calendar.getInstance().getTime(), content));
+			//loadData(noteRepo);
+		
 			
 			
 			// save a couple of customers
@@ -48,6 +45,7 @@ public class WebAppInitializer{
 			repository.save(new City("London", "Briton"));
 			repository.save(new City("California", "USA"));
 			repository.save(new City("New Jersey", "USA"));
+			
 
 			// fetch all Citys
 			log.info("Citys found with findAll():");
@@ -72,6 +70,16 @@ public class WebAppInitializer{
 			}
             log.info("");
 		};
+	}
+
+	private void loadData(NoteRepository noteRepository) {
+		
+		ReadTodoFileService.readNotesFromFile();
+		for(Note note: ReadTodoFileService.getNotes()){
+			noteRepository.save(note);
+			log.info("notes are loaded to database...................");
+		}
+		
 	}
 }
 
