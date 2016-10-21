@@ -2,8 +2,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <jsp:include page="header.jsp" />
 
-<!-- Page Content -->
-<div class="container">
 
 	<div class="row">
 
@@ -23,7 +21,14 @@
 				</c:otherwise>
 			</c:choose>
 			</h1>
+			<c:if test="${not empty message}">
+				<div class="alert alert-success">
+				  <strong>Success!</strong> ${message} .
+				</div>
+			</c:if>
 			<c:forEach items="${notes }" var="note">
+			<div class="panel panel-default">
+				<div class="panel-body">
 				<h2>
 					<a href="#">${note.title}</a>
 				</h2>
@@ -34,10 +39,11 @@
 					<span class="glyphicon glyphicon-time"></span> Posted on
 					${note.date}
 				</p>
-				<hr>
 				<!-- <img class="img-responsive" src="http://placehold.it/900x300" alt=""> -->
 				<hr>
-				<p>${note.content}</p>
+				<button type="button" class="btn btn-info btn-lg" data-toggle="modal"
+				data-target="#myModal">Edit</button>
+					<div id="blog-content-${note.id}">${note.content}</div>
 				<h5>
 				<c:forEach items="${note.tags }" var="tag">
 					<a href="/notes/tag/${tag.name}" class="btn btn-info btn-xs">${ tag.name}</a>
@@ -46,6 +52,8 @@
 				<a class="btn btn-primary" href="/note/${note.id}">Read More <span
 					class="glyphicon glyphicon-chevron-right"></span></a>
 				<hr>
+				</div>
+				</div>
 			</c:forEach>
 			<hr>
 
@@ -60,20 +68,4 @@
 		<jsp:include page="rightSidebarColumn.jsp" />
 	</div>
 	<!-- /.row -->
-
-	<hr>
-
-	<!-- Footer -->
-	<footer>
-		<div class="row">
-			<div class="col-lg-12">
-				<p>Copyright &copy; bonkaula.in 2016</p>
-			</div>
-			<!-- /.col-lg-12 -->
-		</div>
-		<!-- /.row -->
-	</footer>
-
-</div>
-<!-- /.container -->
 <jsp:include page="footer.jsp" />

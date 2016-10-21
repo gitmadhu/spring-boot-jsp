@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.javacodegeeks.examples.model.CityRepository;
 import com.javacodegeeks.examples.model.Note;
 import com.javacodegeeks.examples.model.NoteRepository;
+import com.javacodegeeks.examples.model.Tag;
+import com.javacodegeeks.examples.model.TagRepocitory;
 import com.javacodegeeks.examples.model.User;
 import com.javacodegeeks.examples.model.UserRepository;
 import com.javacodegeeks.examples.service.NotesService;
@@ -37,6 +40,9 @@ public class MainController {
 	@Autowired
 	private NoteRepository noteRepository;
 	
+	@Autowired
+	private TagRepocitory tagRepocitory;
+	
 	@Resource(name="dbNotesService")
 	private NotesService notesService;
 	
@@ -46,20 +52,20 @@ public class MainController {
 	}
 	
 	
-	@RequestMapping(value = "/load-notes", method = RequestMethod.GET)
-    public @ResponseBody String loadNotes(Model model) {
+	@RequestMapping(value = "/load-notes", method = RequestMethod.POST)
+    public String loadNotes(Model model, RedirectAttributes redirectAttrs) {
 		ReadTodoFileService.readNotesFromFile();
-		//List<Note> list= new ArrayList<>();
-		int from = 1; 
-		StringBuffer sb = new StringBuffer();
+		
+		//since tag is not dependent on Note(i.e. no cascade set) tag should be persisted first
+		for(Tag tag: ReadTodoFileService.getAllTags()){
+			tagRepocitory.save(tag);
+		}
+		
 		for(Note note: ReadTodoFileService.getNotes()){
 			noteRepository.save(note);
-			sb.append(from+", ");
-			//list.add(note);
-			from++;
 		}
-		//return noteRepository.findAll();
-		return sb.toString();
+		redirectAttrs.addFlashAttribute("message", "Imported "+ReadTodoFileService.getNotes().size()+" note(s) successfully");
+		return "redirect:/notes";
     }
 	
 	/*private Note assingTags(Note note) {

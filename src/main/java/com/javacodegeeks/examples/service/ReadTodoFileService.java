@@ -33,6 +33,14 @@ public class ReadTodoFileService {
 	private static Set<Note> notes = new HashSet<>();
 	private static Set<Tag> allTags = new HashSet<>(); 
 
+	public static Set<Tag> getAllTags() {
+		return allTags;
+	}
+
+	public static void setAllTags(Set<Tag> allTags) {
+		ReadTodoFileService.allTags = allTags;
+	}
+
 	public static Set<Note> getNotes() {
 		return notes;
 	}
@@ -41,7 +49,7 @@ public class ReadTodoFileService {
 		ReadTodoFileService.notes = notes;
 	}
 
-	public static void main(String[] args) {
+	public static void testMain(String[] args) {
 		String fileName = "D:\\invenio\\todo\\mJava\\spring\\springboot-angularjs-jsp\\springboot-angularjs\\src\\main\\resources\\m.txt";
 		//readNotesFromFile(fileName);
 		// notes.forEach(System.out::println);
@@ -50,21 +58,65 @@ public class ReadTodoFileService {
 
 	public static void readNotesFromFile() {
 		
-		//notes.clear();
+		notes.clear();
 		String fileName = "D:\\invenio\\todo\\mJava\\spring\\springboot-angularjs-jsp\\springboot-angularjs\\src\\main\\resources\\m.txt";
-
-		NoteState noteState = new ReadTodoFileService.NoteState();
 
 		try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
 			
 			List<String> lines = stream.collect(Collectors.toList());
-			for (String line : lines) {
-				noteState = createNote(line.trim(), noteState);
-			}
+			
+			createNotes(lines);
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * TODO: remove
+	 */
+	protected static void createTags() {
+		for(Note note: notes){
+			createTagsFromNote(note);
+		}
+		
+	}
+
+	private static Collection<? extends Tag> createTagsFromNote(Note note) {
+		// TODO Auto-generated method stub
+		String[] words = note.getContent().split(" ");
+    	for(String word: words){
+    		if(word.startsWith("#") && word.length() > 1){
+    			String newTagString = word.substring(word.indexOf("#")+1, word.length());
+    			
+    			boolean foudTag = false;
+    			for(Tag tag: allTags){
+    				if(tag.getName().equalsIgnoreCase(newTagString)){
+    					foudTag = true;
+    					note.addTag(tag);
+    					break;
+    				}
+    			}
+    			if(!foudTag){
+    				Tag newTag = new Tag(newTagString);
+    				note.addTag(newTag);
+    				allTags.add(newTag);
+    			}
+    		}
+    	}
+		return null;
+	}
+
+	private static void createNotes(List<String> lines) {
+		// TODO Auto-generated method stub
+		
+		NoteState noteState = new ReadTodoFileService.NoteState();
+		
+		for (String line : lines) {
+			noteState = createNote(line.trim(), noteState);
+		}
+		
 	}
 
 	private static class NoteState {

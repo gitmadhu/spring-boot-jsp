@@ -1,8 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<jsp:include page="header.jsp" />
-
-<!-- Page Content -->
-<div class="container">
+<jsp:include page="headerDP.jsp" />
 
 	<div class="row">
 
@@ -30,14 +27,14 @@
 			<hr>
 
 			<!-- Preview Image -->
-			<img class="img-responsive" src="http://placehold.it/900x300" alt="">
+			<img class="img-responsive" src="http://placehold.it/900x300" alt="" style="width:100%;height: 300%;" >
 
 			<hr>
 
 			<!-- Post Content -->
 			${note.content}
 			<c:forEach items="${note.tags }" var="tag">
-				<a href="/notes/tag/${tag.id}#disqus_thread" class="btn btn-info btn-xs">${ tag.name}</a>
+				<a href="/notes/tag/${tag.name}#disqus_thread" class="btn btn-info btn-xs">${ tag.name}</a>
 			</c:forEach>
 
 			<hr>
@@ -51,19 +48,6 @@
 	</div>
 	<!-- /.row -->
 
-	<hr>
 
-	<!-- Footer -->
-	<footer>
-		<div class="row">
-			<div class="col-lg-12">
-				<p>Copyright &copy; Your Website 2014</p>
-			</div>
-		</div>
-		<!-- /.row -->
-	</footer>
-
-</div>
-<!-- /.container -->
 
 <jsp:include page="footer.jsp" />

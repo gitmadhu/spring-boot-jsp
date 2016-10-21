@@ -61,7 +61,7 @@ public class Note implements Serializable, Cloneable {
 		@Column(length=100000)
 	    private String content;
 		
-		@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+		@ManyToMany(fetch=FetchType.LAZY)
 	    @JoinTable( name = "nate_tag", joinColumns = @JoinColumn(name = "noteId"), inverseJoinColumns = @JoinColumn(name = "tagId"))
 	    private Set<Tag> tags;
 	    
@@ -152,7 +152,9 @@ public class Note implements Serializable, Cloneable {
 	    				}
 	    			}
 	    			if(!foudTag){
-	    				addTag(new Tag(newTagString));
+	    				Tag newTag = new Tag(newTagString);
+	    				addTag(newTag);
+	    				allTags.add(newTag);
 	    			}
 	    		}
 	    	}
