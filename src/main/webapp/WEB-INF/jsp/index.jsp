@@ -1,168 +1,233 @@
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-app="app" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="app" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="app" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
 <html lang="en">
-<!--<![endif]-->
+
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Spring boot and Angularjs Tutorial</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/webjars/bootstrap/3.3.6/css/bootstrap.css">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+	<meta http-equiv="refresh" content="0; url=notes" />
+    
+    <title>Blog Home - Start Bootstrap Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.6/css/bootstrap.css">
+
+    <!-- Custom CSS -->
+    <link href="css/blog-home.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
+
 <body>
-	<div class="container">
-		<div id="loginbox" style="margin-top: 50px;"
-			class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-			<div class="panel panel-info">
-				<div class="panel-heading">
-					<div class="panel-title">Login</div>
-					<div
-						style="float: right; font-size: 80%; position: relative; top: -10px">
-						<a href="#">Forgot my password?</a>
-					</div>
-				</div>
 
-				<div style="padding-top: 30px" class="panel-body">
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Start Bootstrap</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                    <li>
+                        <a href="#">Services</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                </ul>
+                 <ul class="nav navbar-nav navbar-right ">
+                 	<li>
+                        <a href="/login">Login</a>
+                    </li>
+                 </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
 
-					<div style="display: none" id="login-alert"
-						class="alert alert-danger col-sm-12"></div>
+    <!-- Page Content -->
+    <div class="container">
 
-					<form id="loginform" class="form-horizontal" role="form">
+        <div class="row">
 
-						<div style="margin-bottom: 25px" class="input-group">
-							<span class="input-group-addon"><i
-								class="glyphicon glyphicon-user"></i></span> <input id="login-username"
-								type="text" class="form-control" name="username" value=""
-								placeholder="usuário">
-						</div>
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
 
-						<div style="margin-bottom: 25px" class="input-group">
-							<span class="input-group-addon"><i
-								class="glyphicon glyphicon-lock"></i></span> <input id="login-password"
-								type="password" class="form-control" name="password"
-								placeholder="senha">
-						</div>
+                <h1 class="page-header">
+                    Page Heading
+                    <small>Secondary Text</small>
+                </h1>
 
+                <!-- First Blog Post -->
+                <h2>
+                    <a href="#">Blog Post Title</a>
+                </h2>
+                <p class="lead">
+                    by <a href="index.php">Start Bootstrap</a>
+                </p>
+                <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:00 PM</p>
+                <hr>
+                <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+                <hr>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, veritatis, tempora, necessitatibus inventore nisi quam quia repellat ut tempore laborum possimus eum dicta id animi corrupti debitis ipsum officiis rerum.</p>
+                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
+                <hr>
 
-						<!--    <div class="input-group">
-                                    <!--  <div class="checkbox">
-                                        <label>
-                                          <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
-                                        </label>
-                                      </div>
-                                    </div> -->
+                <!-- Second Blog Post -->
+                <h2>
+                    <a href="#">Blog Post Title</a>
+                </h2>
+                <p class="lead">
+                    by <a href="index.php">Start Bootstrap</a>
+                </p>
+                <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:45 PM</p>
+                <hr>
+                <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+                <hr>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, quasi, fugiat, asperiores harum voluptatum tenetur a possimus nesciunt quod accusamus saepe tempora ipsam distinctio minima dolorum perferendis labore impedit voluptates!</p>
+                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
+                <hr>
 
-						<div style="margin-top: 10px" class="form-group">
-							<!-- Button -->
+                <!-- Third Blog Post -->
+                <h2>
+                    <a href="#">Blog Post Title</a>
+                </h2>
+                <p class="lead">
+                    by <a href="index.php">Start Bootstrap</a>
+                </p>
+                <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:45 PM</p>
+                <hr>
+                <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+                <hr>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate, voluptates, voluptas dolore ipsam cumque quam veniam accusantium laudantium adipisci architecto itaque dicta aperiam maiores provident id incidunt autem. Magni, ratione.</p>
+                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
-							<div class="col-sm-12 controls">
-								<a id="btn-login" href="#" class="btn btn-success">Login </a>
-								<!--<a id="btn-fblogin" href="#" class="btn btn-primary">Login with Facebook</a>-->
+                <hr>
 
-							</div>
-						</div>
+                <!-- Pager -->
+                <ul class="pager">
+                    <li class="previous">
+                        <a href="#">&larr; Older</a>
+                    </li>
+                    <li class="next">
+                        <a href="#">Newer &rarr;</a>
+                    </li>
+                </ul>
 
+            </div>
 
-						<div class="form-group">
-							<div class="col-md-12 control">
-								<div
-									style="border-top: 1px solid #888; padding-top: 15px; font-size: 85%">
-									Don't have an account! <a href="#"
-										onClick="$('#loginbox').hide(); $('#signupbox').show()">
-										Register </a>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		<div id="signupbox" style="display: none; margin-top: 50px"
-			class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-			<div class="panel panel-info">
-				<div class="panel-heading">
-					<div class="panel-title">Sign Up</div>
-					<div
-						style="float: right; font-size: 85%; position: relative; top: -10px">
-						<a id="signinlink" href="#"
-							onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign
-							In</a>
-					</div>
-				</div>
-				<div class="panel-body">
-					<form:form action="register" method="post" id="signupform" modelAttribute="userForm"
-						class="form-horizontal" role="form">
+            <!-- Blog Sidebar Widgets Column -->
+            <div class="col-md-4">
 
-						<div id="signupalert" style="display: none"
-							class="alert alert-danger">
-							<p>Error:</p>
-							<span></span>
-						</div>
+                <!-- Blog Search Well -->
+                <div class="well">
+                    <h4>Blog Search</h4>
+                    <div class="input-group">
+                        <input type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                        </span>
+                    </div>
+                    <!-- /.input-group -->
+                </div>
 
-						<div class="form-group">
-							<label for="email" class="col-md-3 control-label">Email</label>
-							<div class="col-md-9">
-								<form:input type="text" path="email" class="form-control"
-									name="email" placeholder="Email Address" />
-								<form:errors path="email"></form:errors>
-							</div>
-						</div>
+                <!-- Blog Categories Well -->
+                <div class="well">
+                    <h4>Blog Categories</h4>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="list-unstyled">
+                                <li><a href="#">Category Name</a>
+                                </li>
+                                <li><a href="#">Category Name</a>
+                                </li>
+                                <li><a href="#">Category Name</a>
+                                </li>
+                                <li><a href="#">Category Name</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.col-lg-6 -->
+                        <div class="col-lg-6">
+                            <ul class="list-unstyled">
+                                <li><a href="#">Category Name</a>
+                                </li>
+                                <li><a href="#">Category Name</a>
+                                </li>
+                                <li><a href="#">Category Name</a>
+                                </li>
+                                <li><a href="#">Category Name</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.col-lg-6 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
 
-						<div class="form-group">
-							<label for="firstname" class="col-md-3 control-label">First
-								Name</label>
-							<div class="col-md-9">
-								<form:input type="text" path="firstname" name="firstname" class="form-control"
-									placeholder="First Name" />
-								<form:errors path="firstname"></form:errors>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="lastname" class="col-md-3 control-label">Last
-								Name</label>
-							<div class="col-md-9">
-								<form:input type="text" path="lastname" class="form-control"
-									name="lastname" placeholder="Last Name" />
-									<form:errors path="lastname"></form:errors>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="password" class="col-md-3 control-label">Password</label>
-							<div class="col-md-9">
-								<form:input type="password" path="password" class="form-control"
-									name="password" placeholder="Password" />
-								<form:errors path="password"></form:errors>
-							</div>
-						</div>
+                <!-- Side Widget Well -->
+                <div class="well">
+                    <h4>Side Widget Well</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus laudantium odit aliquam repellat tempore quos aspernatur vero.</p>
+                </div>
 
-						<!--  <div class="form-group">
-                                    <label for="icode" class="col-md-3 control-label">Invitation Code</label>
-                                    <div class="col-md-9">
-                                        <input type="text" class="form-control" name="icode" placeholder="">
-                                    </div>
-                                </div> -->
-						<div class="form-group">
-							<label for="icode" class="col-md-3 control-label"></label>
-							<div class="col-md-9">
-								<a id="btn-signup" href="#"  onClick="$('#signupform' ).submit()" class="btn btn-success">Sign up
-								</a>
-							</div>
-						</div>
-					</form:form>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script src="/webjars/jquery/2.0.3/jquery.min.js"></script>
-	<script src="/webjars/bootstrap/3.3.6/js/bootstrap.min.js"> </script>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Your Website 2014</p>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/webjars/bootstrap/3.3.6/js/bootstrap.min.js"> </script>
+
 </body>
+
 </html>

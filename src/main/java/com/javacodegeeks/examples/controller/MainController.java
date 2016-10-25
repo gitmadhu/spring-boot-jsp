@@ -1,23 +1,39 @@
 package com.javacodegeeks.examples.controller;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.javacodegeeks.examples.model.CityRepository;
 import com.javacodegeeks.examples.model.Note;
 import com.javacodegeeks.examples.model.NoteRepository;
+import com.javacodegeeks.examples.model.Tag;
+import com.javacodegeeks.examples.model.TagRepocitory;
 import com.javacodegeeks.examples.model.User;
 import com.javacodegeeks.examples.model.UserRepository;
+import com.javacodegeeks.examples.service.NotesService;
+import com.javacodegeeks.examples.service.ReadTodoFileService;
 
 @Controller
 public class MainController {
@@ -31,10 +47,58 @@ public class MainController {
 	@Autowired
 	private NoteRepository noteRepository;
 	
+	@Autowired
+	private TagRepocitory tagRepocitory;
+	
+	@Resource(name="dbNotesService")
+	private NotesService notesService;
+	
+	
+	static {
+		ReadTodoFileService.readNotesFromFile(false);
+	}
+	
+	
+	@RequestMapping(value = "/load-notes")
+    public String loadNotes(Model model, RedirectAttributes redirectAttrs, @RequestParam boolean original) {
+		ReadTodoFileService.readNotesFromFile(original);
+		
+		List<Note> allNotes = noteRepository.findAll();
+		List<Tag> allTags = tagRepocitory.findAll();
+		//since tag is not dependent on Note(i.e. no cascade set) tag should be persisted first
+		for(Tag tag: ReadTodoFileService.getAllTags()){
+			if(!allTags.contains(tag)){
+				tagRepocitory.save(tag);
+			}
+		}
+		
+		for(Note note: ReadTodoFileService.getNotes()){
+			if(!allNotes.contains(note)){
+				noteRepository.save(note);
+			}
+			
+		}
+		redirectAttrs.addFlashAttribute("message", "Imported "+ReadTodoFileService.getNotes().size()+" note(s) successfully");
+		return "redirect:/notes";
+    }
+	
+	/*private Note assingTags(Note note) {
+		for(Tag tag: note.getTags()){
+			tag = entityManager.merge(tag);
+		}
+		return note;
+	}*/
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView getLoginPage(@RequestParam Optional<String> error, Model model) {
 		model.addAttribute("userForm",new User());
         return new ModelAndView("login", "error", error);
+    }
+	
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView homepage() {
+        return new ModelAndView("index");
     }
 
     
@@ -45,14 +109,76 @@ public class MainController {
     }
     
     @RequestMapping(value="/notes",method = RequestMethod.GET)
-    public String notes(Model model){
-    	model.addAttribute("notes",noteRepository.findAll(new Sort("date")));
+    public String notes(Model model,  @PageableDefault(size = 10) Pageable pageable){
+    	model.addAttribute("notePage",notesService.getAllNotes(pageable));
+        return "noteshome";
+    }
+   
+    
+    @RequestMapping(value="/export-notes",method = RequestMethod.GET)
+    public String exportNotes(){
+    	String file = "initialdata-notes.mtodo";
+    	try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(file))) {
+    		
+    		for(Note note: notesService.getAllNotes()){
+                writer.write(note.getTitle().replaceAll("<br/>", System.lineSeparator())+System.lineSeparator());
+                writer.write(note.getContent().replaceAll("<br/>", System.lineSeparator()));
+                writer.write("------------------------------------------------ "+System.lineSeparator());
+        	}
+
+        } catch (IOException e) {
+			e.printStackTrace();
+		} 
+        return "noteshome";
+    }
+
+	@RequestMapping(value="/udpate/note/{noteId}",method = RequestMethod.POST)
+    public @ResponseBody String updateNote(@PathVariable Long noteId, Model model, String content, String title){
+    	Note noteTobeUpdated = notesService.getNoteById(noteId);
+    	if(content != null & !content.isEmpty()){
+    		noteTobeUpdated.setContent(content);
+    	}
+    	if (title != null & !title.isEmpty()) {
+    		noteTobeUpdated.setTitle(title);
+		}
+    	
+    	noteRepository.save(noteTobeUpdated);
+    	
+		return "Note with Id : "+noteTobeUpdated.getId()+"' has been successfully udpated";
+    	
+    }
+    
+    @RequestMapping(value="/notes/search",method = RequestMethod.GET)
+    public String searchNotesByText(@RequestParam String tag, @RequestParam String text, Model model){
+    	
+    	if(null != tag && !tag.isEmpty() ){
+    		model.addAttribute("notes",notesService.getNotesByTag(tag));
+    	}else{
+    		model.addAttribute("notes",notesService.searchNotesByText(text));
+    	}
+    	
+    	model.addAttribute("text", text);
+    	model.addAttribute("tag", tag);
         return "notes";
+    }
+    
+    @RequestMapping(value="/notes/tag/{tag}",method = RequestMethod.GET)
+    public String filterNotesByTag(@PathVariable String tag, Model model){
+    	model.addAttribute("notes",notesService.getAllNotesByForTag(tag));
+    	model.addAttribute("tag", tag);
+        return "notes";
+    }
+    
+    
+    @RequestMapping(value="/note/{noteId}",method = RequestMethod.GET)
+    public String noteDetails(@PathVariable Long noteId, Model model){
+    	model.addAttribute("note",notesService.getNoteById(noteId));
+        return "noteDetails";
     }
     
     //this is to test theme leaf
     
-    @RequestMapping(value="/test")
+    @RequestMapping(value="/cities")
     public String hello(Model model){
     	
     	model.addAttribute("cities", cityRepository.findAll());
