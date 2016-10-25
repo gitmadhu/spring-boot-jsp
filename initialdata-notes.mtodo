@@ -1,0 +1,782 @@
+June 1, 2016June 1, 2016
+
+#codeFlow #ibsmallOMS #omsIbsmall
+DefaultCommerceStockService.getStockLevelForProductAndBaseStore(ProductModel product, BaseStoreModel baseStore)
+-IbsStockLevelAvailabilityCalculationStrategy.calculateAvailability(Collection&lt;StockLevelModel> stockLevels)
+->stockLevels = DefaultSellerStockService.getStockLevels(ProductModel product, Collection&lt;WarehouseModel> warehouses)
+-final long atpAvailable = availableToPromiseDao.getAvailableQuantityForStockLevel(params).longValue()
+- availableToPromiseDao.getAllocatedQuantityForStockLevel(params).longValue()
++ availableToPromiseDao.getCancelledQuantityForStockLevel(params).longValue()
+- availableToPromiseDao.getReservedQuantityForStockLevels(params).longValue();
+
+#hotfolderConfiguration #uploadCSV
+#ref https://help.hybris.com/6.0.0/hcd/8ad0ddef866910148b9ba21d1ffa31cf.html
+
+------------------------------------------------ 
+May 03, 2016m#imp #interviewMay 03, 2016m#imp #interview
+https://help.hybris.com/6.0.0/hcd/06593ce2fb89410a8d296018a2b76801.html#loioc4336f20391a43498ecebcc76098c924
+
+#why changes in TSD
+- seller --> customer as seller reason is  if an existing customer want to be a seller we had to create a new instance as seller by duplicating the customer
+
+-Marketplaceflow:
+-
+- /productLayout1Page.jsp
+------------------------------------------------ 
+Apr 14, 2016Apr 14, 2016
+
+#hybrisVideos #ytv #ref https://wiki.hybris.com/display/media/y-tv
+#core+ #coreplussLib #lib
+Core+ library, such as EMS and SBG (Subscription Billing Gateway)
+
+https://wiki.hybris.com/display/media/y-tv
+
+#hybris6.0
+#more : drools rules engine, open source.
+Rule Engine uses Drools as the core Business Rule Management System(brms)
+-ZK version 8.0, backoffice in #hybris6.0
+------------------------------------------------ 
+Apr 20, 2016Apr 20, 2016
+-Tech Design doc
+#ibsmall
+
+Order Sourcing
+<pre><code class='language-js'>
+&lt;!-- Order Splitting -->
+&lt;alias name="ibsstorefulfilmentprocessOrderSplittingService" alias="orderSplittingService"/>
+&lt;bean id="ibsstorefulfilmentprocessOrderSplittingService" parent="defaultOrderSplittingService" >
+&lt;property name="strategiesList">
+&lt;list>
+&lt;ref bean="splitbySeller"/>
+.......
+.......
+&lt;/list>
+&lt;/property>
+&lt;/bean>
+</code></pre>
+#ref https://help.hybris.com/6.0.0/hcd/8b579aab8669101485e5bb1803f397b9.html #ATP
+#codeflowATP #ATP flow: stockPopulator-->CommerceStockService(-->stockservice: another service in the method) -->StockCalculationStrategy
+public Long #WarehousingAvailabilityCalculationStrategy.calculateAvailability(Collection&lt;StockLevelModel> stockLevels) {
+<pre><code class='language-js'>
+if (stockLevels.isEmpty()) {
+return Long.valueOf(0L);
+}
+
+Map params = setupParameters(stockLevels);
+return Long.valueOf(getAvailableToPromiseDao()
+.getAvailabilityForStockLevels(params).longValue()
+- getAvailableToPromiseDao()
+.getAllocationQuantityForStockLevels(params)
+.longValue()
++ getAvailableToPromiseDao()
+.getCancellationQuantityForStockLevels(params)
+.longValue()
+- getAvailableToPromiseDao().getReservedQuantityForStockLevels(
+params).longValue());
+}
+</code></pre>
+------------------------------------------------ 
+May 25, 2016May 25, 2016
+#timesheet
+-   oms frontend pages code review and integration with backend services and review  - 8h
+
+------------------------------------------------ 
+June 9, 2016June 9, 2016
+#timesheet
+-attend session on Spring JDBC - 1hr
+#more tedtalks #imp
+
+D:\invenio\todo\mJava\mGit
+git remote add origin https://github.com/gitmadhu/mgit.git
+------------------------------------------------ 
+Apr 15, 2016Apr 15, 2016
+#hybrisdownload #hybris6.0
+#suser #logic #superuser
+
+
+#startHybris6.0
+ref: https://help.hybris.com/6.0.0/hcd/def73632725b472d88dd2dfe93fafc42.html
+------------------------------------------------ 
+May 13, 2016May 13, 2016
+
+
+public Collection&lt;StockLevelModel> getStockLevels(ProductModel product, Collection&lt;WarehouseModel> warehouses)
+
+
+------------------------------------------------ 
+Apr 19, 2016Apr 19, 2016
+#timesheet
+- session     1hr
+
+
+git remote add origin https://madhuibs@bitbucket.org/saphybris60/saphybris60.git
+git clone
+
+#more #mmore
+http://www.egyankosh.ac.in/ - SOA, organic forming
+
+#DefaultCommerceStockService.getPosAndStockLevelStatusForProduct(ProductModel product, BaseStoreModel baseStore)
+
+#codeflow
+SELECT {p2w.source},{sl.pk}
+from {Stocklevel as sl JOIN PointOfService as pos ON {pos.baseStore}=?baseStore
+JOIN PoS2WarehouseRel as p2w ON {p2w.source}={pos.pk}
+AND {p2w.target} = {sl.warehouse}}
+WHERE {sl.productCode} = ?productCode
+
+pos.basestore = basestore
+p2w.source    = pos.pk
+p2w.target    =sl.warhouse
+
+
+pos.pk &lt;-->source.p2w.target &lt;-->sl.warehouse
+
+- select p, sl for all pos for which basestore is bs
+where p.w = p2w.p and p2w.w = sl.w
+------------------------------------------------ 
+May 12, 2016May 12, 2016
+
+#IbsMall #inventory impl
+code from warehousing ext.
+-DefaultInventoryEventService.java
+
+- #codeflow #OMS-inventory #ibsmall
+SourceOrderAction.executeAction(final OrderProcessModel process)
+- getAllocationService().createConsignments(process.getOrder(), "cons" + process.getOrder().getCode(), results)
+-(Collection&lt;ConsignmentModel>)results.getResults().stream().map(result -> this.createConsignment(order, String.valueOf(code) + "_" + index.getAndIncrement(), result)).collect(Collectors.toList());
+
+
+-.gitingore #storefront-files
+bin/custom/ibsmall/ibsmallstorefront/web/
+
+
+
+------------------------------------------------ 
+Apr 28, 2015Apr 28, 2015
+
+-seller reg work flow
+-
+BankAccount
+-accountNumber
+-ifscOrBANCode
+-accountHolderName
+-branch
+
+#more #umldiagrams #ref https://dzone.com/articles/uml2-class-diagram-java
+#more #bootstrap #css #jquery #UI #ux
+#ref http://www.w3schools.com/bootstrap/bootstrap_get_started.asp
+-http://www.w3schools.com/bootstrap/bootstrap_tables.asp
+
+------------------------------------------------ 
+https://192.168.2.47:9002/ibsmallstorefront/en/Categories/Snowwear-men/Snow-Jackets/Last-Mission-Jacket/p/300460184_seller1https://192.168.2.47:9002/ibsmallstorefront/en/Categories/Snowwear-men/Snow-Jackets/Last-Mission-Jacket/p/300460184_seller1
+
+#more #new #ref http://docs.spring.io/spring-security/site/docs/current/reference/html/csrf.html
+-Cross Site Request Forgery (CSRF)
+
+#imp #killProcess # find process for a Port number  and kill it #windows
+>C:\Users\username>netstat -o -n -a | findstr 0.0:3000
+TCP    0.0.0.0:3000      0.0.0.0:0              LISTENING       3116
+>C:\Users\username>taskkill /F /PID 3116
+
+------------------------------------------------ 
+May 19, 2016May 19, 2016
+#timesheet
+-OMS services for order fulfilment 60 percent done - 7h
+-code review for kumar's oms page in my acct sections - 1h
+
+#omssaphybris #saphybis #warehouse #UserRoles #omsbackoffice #pickpackship
+#ref https://help.hybris.com/6.0.0/hcd/8c200b5386691014b67af64ea8281f4f.html
+#ref https://help.hybris.com/6.0.0/hcd/8c2fba9a866910148d52efaa896f814c.html
+-merge oms pages branch
+------------------------------------------------ 
+
+May 17, 2016
+#timesheet
+sessions on vouchers - 1h
+seller list should exclude the current selected seller -3h
+-iventory management impl in oms - 4h
+
+
+#b2bAccPlus #session
+installer> sh install.sh -r b2b_acc_plus
+installer> sh install.sh -r b2b_acc_plus start
+installer> sh install.sh -r b2b_acc_plus initialize
+
+------------------------------------------------ 
+Apr 18,2015Apr 18,2015
+
+hybris60 setup
+1. Setup platform using command:  sh install.sh -r b2c_china setup
+2. Initialize platform using command : sh install.sh -r b2c_china  initialize
+3. Start platform using command :sh install.sh -r b2c_china  start
+
+
+------------------------------------------------ 
+May 05, 2016May 05, 2016
+#timesheet
+-standup  -1hr
+-analyse addtocart implementation changes -7hr
+
+git remote add origin  https://madhuibs@bitbucket.org/ibsmarketplace/hybris_marketplace.git
+(or) git remote set-url origin https://madhuibs@bitbucket.org/ibsmarketplace/hybris_marketplace.git
+
+- setup sap hybris 6 - 2h
+- analyse the addtocart functionality - 6h
+
+------------------------------------------------ 
+June 07, 2016June 07, 2016
+- add warehouse to seller while sellerregistratin approve -5
+- fix issue in pdp page for variant products.. -2h
+- session on spring security - 1h
+-117452_uni
+-117452
+
+
+variant1 - 300564864   :ApparelSizeVariantProduct     , varianttype: ApparelSellerVariantProduct
+-base - 117452_uni : ApparelStyleVariantProduct   , varianttype: ApparelSellerVariantProduct
+-base - 117452
+------------------------------------------------ 
+May 10, 2016May 10, 2016
+
+#timesheet
+- standup and session on skeloton and team meeting:  1hr 30 mins
+- pdp page sellers tag                            : 6h 30min
+
+
+
+----
+May 11, 2016
+#timesheet
+-pdp page seller product link and sold by field add to cart button -6h
+-order process issue with checkpayment action - 2h
+-checkthe inventory actions flow
+
+#mtodo #ibsmall override VariantOptionDataPopulator.java
+------------------------------------------------ 
+June 2, 2016June 2, 2016
+-SellerProductCatalog
+-for bulk upload there is no workflow.
+
+------------------------------------------------ 
+May 02, 2016May 02, 2016
+
+https://wiki.hybris.com/display/accdoc50to56/Storefront+and+Catalog+Modelling
+#datamodeling diagrams
+
+High-level diagram that visualizes how the marketplace sample data storefront, seller and customer data is separated
+
+------------------------------------------------ 
+May 9, 2016May 9, 2016
+#timesheet
+- update datamodel with product and seller relation changes and add more details for stockfulfillment - 4h
+
+#mAddtocart #codeflow #pdpCodeflow
+
+- productVariantSelector.tag : product variant selector
+-productvariantselectorcomponent.jsp
+
+Seller variant
+https://apparel-uk.local:9002/ibsmallstorefront/en/Categories/Snowwear-men/Snow-Jackets/Last-Mission-Jacket/p/300460184
+------------------------------------------------ 
+May 23, 2016May 23, 2016
+#sessionOnB2B #ref https://help.hybris.com/6.0.0/hcd/8b5dfc4486691014bb07defcc843ae80.html
+-About B2B commerce
+-simply defined as a e commerce between companies/businesses
+-Deals relationships between and among the buisnesses.
+-80% of ecommerce is of this type and
+-Experts predict that b2b commerce will continue to grow faster than the B2C segment.
+
+-Chalenges faced by B2B customers
+-Key Features of hybris b2b commerce Module
+
+#notes:
+- It is a partial payment or credit B2C offers B2B, where after sales the pending amount gets cleared
+-supply chain: impl of all the activities involved in the procurement of the product
+-Product Request - Supply Chain - Customer
+-value chain: Value Chain is defined as the series of activities, that adds value to the product
+-Customer Request - Value Chain - Product
+
+#jargon #words
+-supply chain, value chain
+-manufacturer, distributer, dealer, retailer, customer
+
+
+------------------------------------------------ 
+May 18, 2016May 18, 2016
+#timesheet
+- check warehousing impl in oms - 4h
+-OMS services for order fulfilment 10 percent done - 4h
+
+replace below two jars with new jars of version 6.22
+bin\ext-cockpit\cockpit\lib\jasperreports-4.0.2.jar
+bin\ext-cockpit\cockpit\lib\jasperreports-fonts-4.0.2.jar
+
+waitForShipConsignment
+-confirmShipConsignment -confirmShipConsignment  -> consignmentProcessEnd
+-pickShipConsignment    -pickShipConsignment     -> waitForShipConsignment(packShipConsignment)
+-packShipConsignment    -packShipConsignment     -> waitForShipConsignment(confirmShipConsignment)
+-consignmentProcessEnd  -SUCCESS
+
+------------------------------------------------ 
+Jun 18, 2015Jun 18, 2015
+
+#runspringboot run spring boot: java -jar target/myproject-0.0.1-SNAPSHOT.jar
+debug #springboot : $ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \ 	-jar target/myproject-0.0.1-SNAPSHOT.jar
+#springbootStart #ref:	https://spring.io/guides/gs/spring-boot/
+@SpringBootApplication is convenient annotation which add all bellow
+-@configuration
+-@EnableCofiguration
+-@EnableWebMvc
+-@ComponentScan
+The @SpringBootApplication annotation is equivalent to using @Configuration, @EnableAutoConfiguration and @ComponentScan with their default attributes:
+
+19.2 Running as a packaged application
+If you use the Spring Boot Maven or Gradle plugins to create an executable jar you can run your application using java -jar. For example:
+
+$ java -jar target/myproject-0.0.1-SNAPSHOT.jar
+It is also possible to run a packaged application with remote debugging support enabled. This allows you to attach a debugger to your packaged application:
+
+$ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
+-jar target/myproject-0.0.1-SNAPSHOT.jar
+with Maven: mvn spring-boot:run
+with gradle: gradle bootRun  (add gradle plugin -  spring-boot-gradle-plugin:)
+
+
+Spring boot with jsp #springboowithjsp #springbootjsp #ref http://www.leveluplunch.com/java/tutorials/003-getting-started-with-spring-boot/
+#ref http://kielczewski.eu/2014/04/spring-boot-mvc-application/
+&lt;dependency>
+&lt;groupId>org.apache.tomcat.embed&lt;/groupId>
+&lt;artifactId>tomcat-embed-jasper&lt;/artifactId>
+&lt;scope>provided&lt;/scope>
+&lt;/dependency>
+&lt;dependency>
+&lt;groupId>javax.servlet&lt;/groupId>
+&lt;artifactId>jstl&lt;/artifactId>
+&lt;/dependency>
+And add properties to applicaton.properties file - So they will be stored in src/main/webapp/WEB-INF/jsp, and the files will end with .jsp
+spring.mvc.view.prefix=/WEB-INF/jsp/
+spring.mvc.view.suffix=.jsp
+Example: D:\invenio\todo\mJava\spring\springboot-angularjs-jsp\springboot-angularjs
+#accessingDataWithJPA #ref https://spring.io/guides/gs/accessing-data-jpa/
+
+#ref: http://projects.spring.io/spring-data/ #springData
+<pre><code class='language-js'>
+// Using CrudRepository creates concrete operations like
+/* save(Employee)
+delete(Employee)
+find(Employee)
+find(Long)
+findAll()
+*/
+// And On top of the CRUD operations inherited from CrudRepository, the interface defines two query methods. 'findByFirstName' and 'findByLastName'
+public interface EmployeeRepository extends CrudRepository&lt;Employee, Long> {
+
+Employee findByFirstName(String firstName);
+
+List&lt;Employee> findByLastName(String lastName);
+}
+
+</code></pre>
+
+//Add my sql datasource properties
+spring.datasource.url=jdbc:mysql://localhost/test
+spring.datasource.username=root
+spring.datasource.password=password
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+
+#springbootExample: http://www.marciomarinho.com/blog/?p=246
+
+?SpringBootServletInitializer :
+
+
+#commerce #ecommerce #terminology
+-ledger creations
+-Sales account
+-perchase account\
+http://web.easypos.in/Registration.aspx
+------------------------------------------------ 
+May 27, 2016May 27, 2016
+#timesheet
+- merge others branch and make develop uptodate..
+#stockMangement #warehouse #pointOfService #imp
+#ref https://help.hybris.com/6.0.0/hcd/8aef948986691014bd5bbb9f2ecfb33f.html
+#ref : https://help.hybris.com/6.0.0/hcd/8acc8a5a86691014a20781b3f738213e.html #startAcceleratorTechnicalDetails #mStart #startB2b
+
+------------------------------------------------ 
+﻿﻿
+------------------------------------------------ 
+June 14, 2016June 14, 2016
+**#timesheet\\\\\\\\
+-	OMS team meeting and check the issue for oms  - 2h
+-  session on promotions - 1hr
+-  Worked on the inventory decrease issue once the order is shipped. - 5h
+
+-Create currency for india and set to basestore ibsmall
+-create address by coping madhu@bonakula.in address
+-change madhu@bonakula.in currency to INR
+-make sure address(delivery and payment) for madhu@bonakula.in is set to indian address
+-add delivery coultries to the basestore.
+-delivery costs
+
+
+
+SELECT {p.pk} FROM {PriceRow as p} WHERE {p.productId} = 300515779 AND {p.currency} = 8796125855777]
+, query parameters: [{productId=300515779, currency=CurrencyModel (8796125855777@5)}]
+
+#jdk8 #stream #mapExample
+final Collection&lt;AllocatedModel> allocations = consignment.getConsignmentEntries().stream()
+.map(consignmentEntry -> createStockAllocation(consignmentEntry)).collect(Collectors.toList());
+modelService.saveAll(allocations);
+------------------------------------------------ 
+May 04, 2016May 04, 2016
+
+#timesheet
+- analyse and understand order fulfilment to implement seller oms - 8hr
+
+@      Sprint 1	12 days	Thu 5/12/16	Fri 5/27/16	9
+@        Build	10 days	Thu 5/12/16	Wed 5/25/16
+#           Define Product Model	4 days	Fri 5/20/16	Wed 5/25/16		Madhu
+#            PDP Changes	6 days	Thu 5/12/16	Thu 5/19/16		Madhu
+#            Reports/Dashboard	10 days	Thu 5/12/16	Wed 5/25/16		Sai
+#            Order Management	10 days	Thu 5/12/16	Wed 5/25/16		Kumar
+#            Product Upload - New Product	10 days	Thu 5/12/16	Wed 5/25/16		Santosh
+
+#reciepies #reciepe customize to use #customeCodeBase
+
+#ref https://help.hybris.com/6.0.0/hcd/f7bd6e3caca1412bb8ceb462145ba14d.html
+
+#ibsmallSetup #ref https://help.hybris.com/6.0.0/hcd/f7bd6e3caca1412bb8ceb462145ba14d.html
+
+#installerUsedForIbsMall  #ibsmall
+-hybris6\installer\recipes\b2c_acc - with modified customer extensions.
+-and then add reciepe extensions: smartedit_cms
+
+------------------------------------------------ 
+#gradleStart #strartGradle #gradlTutorial #ref https://www.youtube.com/watch?v=TrLnMs89P5E#gradleStart #strartGradle #gradlTutorial #ref https://www.youtube.com/watch?v=TrLnMs89P5E
+#ref https://spring.io/guides/gs/gradle/
+Gradle Version 2.11
+-in file build.gradle add bellow
+apply plugin "java"
+-then run [gradle tasks] shows below tasks
+clean
+jar
+testclass
+classess
+.. etc...
+-then update as below
+apply plugin "java"
+apply plugin "elcipse"
+
+-then if you run [build tasks] it show below ide specific tasks aprart from above tasks
+elcise
+...etc
+
+------------------------------------------------ 
+May 26, 2016May 26, 2016
+- fix issues of frontend part of oms page and test complete pick pack and confirm ship actions - 8h
+
+#issueAndSol #deploymentCode
+#ref https://help.hybris.com/6.0.0/hcd/8c6254f086691014b095a08a61d1efed.html
+
+#PrintPackLabelAction
+#backofficeAction where consignment workflow action will be triggered. PrintPackLabelAction
+
+-div ajax update
+-url
+-consignment actions order
+-table header
+-filter the consignment by status(!shipped)
+
+------------------------------------------------ 
+#ref : http://smallseotools.com/website-seo-score-checker/ #rankchecker #websiterank #seo#ref : http://smallseotools.com/website-seo-score-checker/ #rankchecker #websiterank #seo
+
+------------------------------------------------ 
+May 6, 2016May 6, 2016
+
+#timesheet
+-standup and domain model discussion -2hr
+-code update for modified domain model and work - 6h
+
+#imp #interviewHybris
+-creating 1-1 relationshipt gives below error
+java.lang.IllegalStateException: invalid relation type CustomerToSellerRelation:......
+....since 1-1 relations are not supported..
+
+#javaToUML #GenMyModel #uml
+#ref https://repository.genmymodel.com/madhub2v2/testuml
+
+------------------------------------------------ 
+June 17, 2016June 17, 2016
+
+66211711801340
+
+
+-Commision  -Madhu
+-Delivery methods at category level   -Kumar
+-payment details and workflow         -Jigyasa
+
+-Other pending tasks:
+-add product in both staged and online  -Madhu	ASCF=;L
+]['P;;;;;;OL -single product listing -Shruthi
+-product workflow    -Shruthi
+-top5 sellers , query change   - Sai
+-Product search list should show only seller variants -Santhosh
+-Hide store locator, add sellers facet. hide Shop by Stores facet.
+-Add wish list in pdp
+
+-Product search list should show only seller variants
+-Product image page for new product listing, product workflow -sai
+-Hide store locator, add sellers facet. hide Shop by Stores facet.
+-Show all sellers in sellers tab, remove pickup in store.
+-Correct app url
+-Add wish list in pdp
+
+amazor seller lern
+https://youtu.be/jdmRv5-B8x0
+
+------------------------------------------------ 
+Jun 10, 2016Jun 10, 2016
+#timesheet
+- add smartedit feature and update the build  - 8h
+#ref https://www.quora.com/What-are-basic-differences-between-IAAS-PAAS-and-SAAS #imp
+
+
+SELECT {pk} FROM {VariantProduct AS p  join varianttype as vt on {p.varianttype} = {vt.pk}} where {vt.code} = 'ApparelSellerVariantProduct'
+
+select {code} from {varianttype}
+
+#hosting #websiteHosting #heroku
+
+#ref
+https://devcenter.heroku.com/articles/getting-started-with-java#deploy-the-app
+https://devcenter.heroku.com/articles/getting-started-with-spring-mvc-hibernate
+error:  ENOENT: spawn git ENOENT
+solution: git is not setup
+git remote add heroku https://git.heroku.com/pacific-tor-77105.git
+git remote set-url heroku https://git.heroku.com/m.git
+git remote set-url heroku https://git.heroku.com/mb2v.git
+
+#push code changes #heroku : git push heroku HEAD
+------------------------------------------------ 
+
+Apr 25, 2016
+
+- Setup QA instance 1hr
+
+************
+
+<pre><code class='language-js'>
+class Confusing {
+public Confusing(Object object) {
+System.out.println("object");
+}
+
+public Confusing(double[] array) {
+System.out.println("double array");
+}
+
+
+}
+public static void main(String[] args) {
+Confusing confusing = new Confusing(null);
+}
+***************
+
+public class SetList {
+public static void printArray() {
+int[] intArray = {1, 2, 3, 4, 5, 6, 7, 8};
+
+for(int i = 0; i &lt; 8; ++i) {
+System.out.println(intArray[i]);
+}
+}
+
+public static void main(String[] args) {
+printArray();
+Set&lt;Integer> set = new HashSet&lt;>();
+List&lt;Integer> list = new ArrayList&lt;>();
+
+for(int i = -3; i &lt; 3; i++) {
+set.add(i);
+list.add(i);
+}
+
+for(int i = 0; i &lt; 3; i++) {
+set.remove(i);
+list.remove(i);
+}
+System.out.println(set + " " + list);
+}
+}
+
+---
+[1:01:38 PM | Edited 1:02:53 PM] Ramana Reddy Moole: public static void main(String[] args) {
+List&lt;? extends Computer> computers = new ArrayList&lt;>();
+computers.add(new Computer());
+computers.add(new Laptop());
+}
+
+class Computer {
+}
+class Laptop extends Computer {
+}
+[1:01:49 PM | Edited 1:01:49 PM] Ramana Reddy Moole: what is the output of this program?
+---
+public static void main(String[] args) {
+// final String resource1 = "ratan jaiswal";
+// final String resource2 = "vimal jaiswal";
+Thread t1 = new Thread() {
+public void run() {
+synchronized (resource1) {
+System.out.println("Thread 1: locked resource 1");
+
+try { Thread.sleep(100);} catch (Exception e) {}
+
+synchronized (resource2) {
+System.out.println("Thread 1: locked resource 2");
+}
+}
+}
+};
+
+Thread t2 = new Thread() {
+public void run() {
+synchronized (resource2) {
+System.out.println("Thread 2: locked resource 2");
+
+try { Thread.sleep(100);} catch (Exception e) {}
+
+synchronized (resource1) {
+System.out.println("Thread 2: locked resource 1");
+}
+}
+}
+};
+
+t1.start();
+t2.start();
+}
+</code></pre>
+------------------------------------------------ 
+June 15, 2016June 15, 2016
+
+#timesheet
+- Inventory decrease once order is confirmed and backoffice changes to add stock to a product - 8h
+
+-#Create #backoffice #extension #stratBackoffice #startcockpitng
+#ref https://help.hybris.com/6.0.0/hcd/8e3cf5cf7cd14bc9b740b52993044df5.html
+
+#backoffice component name
+//	1. define :  in *widget.xml for a widget as below (ref: warehousingbackoffice extension)
+&lt;widget id="warehousingEditorArea" widgetDefinitionId="com.hybris.cockpitng.backoffice.defaultEditorArea" slotId="bottom" template="false">
+.........
+.........
+&lt;setting key="editorAreaConfigCtx" type="String">warehousingbackoffice-editor-area&lt;/setting>
+.........
+&lt;/widget>
+2. use same as component in *config.xml
+&lt;context merge-by="module" parent="GenericItem" type="StockLevel" component="warehousingbackoffice-editor-area">
+&lt;editorArea:editorArea xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+........
+........
+&lt;/editorArea:editorArea>
+&lt;/context>
+
+
+git remote add origin  https://madhuibs@bitbucket.org/sap_b2c_oms/b2c_oms.git
+
+git branch --set-upstream-to=origin/develop develop
+------------------------------------------------ 
+June 6, 2016June 6, 2016
+
+Listing
+http://goo.gl/IQeoit
+http://goo.gl/xn1Bff
+http://goo.gl/IQeoit
+
+http://goo.gl/iqeoit
+
+#MarketplacePending
+-Product search list should show only seller variants
+-Product image page for new product listing, product workflow -sai
+-Hide store locator, add sellers facet. hide Shop by Stores facet.
+-Show all sellers in sellers tab, remove pickup in store.
+-Correct app url
+-Add wish list in pdp
+-Commission and delivery charges.
+#Q&A : new product listing  for existing product... workflow?
+
+========================================
+# Macros / Replacement Parameter definitions
+$productCatalog=ibsMarketplaceProductCatalog
+$productCatalogName=Apparel Product Catalog
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,default=$productCatalog:Staged]
+$baseProduct=baseProduct(code, catalogVersion(catalog(id[default='$productCatalog']),version[default='Staged']))
+$approved=approvalstatus(code)[default='approved']
+$taxGroup=Europe1PriceFactory_PTG(code)[default=eu-vat-full]
+
+# Create ApparelProduct variants
+INSERT_UPDATE ApparelProduct;code[unique=true];$catalogVersion;varianttype(code)
+;100378    ;               ;ApparelSizeVariantProduct
+
+# Create ApparelSellerVariantProduct variants
+INSERT_UPDATE ApparelSellerVariantProduct;code[unique=true];$catalogVersion;$baseProduct;supercategories(code,$catalogVersion);unit(code)[default='pieces'];$approved;$taxGroup;seller(uid);
+#;300460184_seller1;;300460184;190100,snow,Quiksilver;pieces;;;seller1;
+;100378_seller1;;100378;10100,snow,Ride;pieces;;;seller1;
+
+INSERT_UPDATE PriceRow;productId[unique=true];unit(code[unique=true,default=pieces]);currency(isocode)[unique=true];price;minqtd;unitFactor;net
+#;300460184_selleribs2;pieces;GBP;64,76;1;1;false
+;100378_seller1;pieces;GBP;555;1;1;false
+
+INSERT_UPDATE StockLevel;available[unique=true];warehouse(code)[unique=true];inStockStatus(code);maxPreOrder;maxStockLevelHistoryCount;overSelling;preOrder;productCode[unique=true];reserved
+#;11;mp_warehouse_seller1;forceInStock;0;0;0;0;300460184_seller1;0
+;555;mp_warehouse_seller1;forceInStock;0;0;0;0;100378_seller1;0
+============================
+------------------------------------------------ 
+June 08, 2016June 08, 2016
+#timesheet
+- wharehouse creation issue while seller registration... 2h
+- add product link in single product listing -3h
+- allow seller to add only size variants -3h
+
+#kindle #booksFree #freebooksKindle
+http://www.amazon.in/gp/bestsellers/digital-text/ref=zg_bs_fvp_p_f_digital-text?ie=UTF8&tf=1
+
+117452_ibs3@seller.com
+
+
+warehouse.setCode("mp_warehouse_" + sellerProfile.getCode());
+warehouse.setName(sellerProfile.getCode() + " Warehouse");
+------------------------------------------------ 
+May 24, 2016May 24, 2016
+#timesheet
+- session on B2B ecommerce - 1h
+- complete oms pick, pack and ship impl - 7h
+
+-mark.rivers@rustic-hw.com - b2bcustomer
+-Custom Retail, b2bcustomergroup, premiumPermissions
+-anthony.lombardi@rustic-hw.com - b2bCustomer
+-Custom Retail, b2bcustomergroup,limitedPermissions
+-marie.dubois@rustic-hw.com
+-Custom Retail, b2bcustomergroup,standardPermissions
+
+-Approvers
+-hanna.schmidt@rustic-hw.com
+-Rustic, b2bapprovergroup
+-james.bell@rustic-hw.com
+-Rustic Services, b2bapprovergroup
+-carla.torres@rustic-hw.com
+-Custom Retail, b2bapprovergroup
+-B2B admin
+-linda.wolf@rustic-hw.com
+-B2B Manager
+-anil.gupta@rustic-hw.com
+
+------------------------------------------------ 
+May 16, 2016May 16, 2016
+#timesheet
+#pdp changes skip selected seller in the list of sellers list  - 4h
+leave - 4h
+#kindle #more #epub #pdf #read
+https://archive.org/details/AGameOfThrones01
+------------------------------------------------ 

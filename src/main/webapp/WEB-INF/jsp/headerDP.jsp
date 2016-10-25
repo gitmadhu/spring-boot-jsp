@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.6/css/bootstrap.min.css">
     <!-- Custom CSS -->
     <link href="/css/blog-post.css" rel="stylesheet">
+    <script src="/js/ckeditor/ckeditor.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

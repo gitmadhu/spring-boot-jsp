@@ -12,14 +12,14 @@
 			<c:choose>
 				<c:when test="${tag != null }">
 					Notes for Tag <b>${tag}</b>
-					<small> found ${fn:length(notes)} note(s) </small>
+					<small> found ${fn:length(notePage.content)} note(s) </small>
 				</c:when>
 				<c:when test="${text != null }">
 					Notes for Text <b>${text}</b>
-					<small> found ${fn:length(notes)} note(s) </small>
+					<small> found ${fn:length(notePage.content)} note(s) </small>
 				</c:when>
 				<c:otherwise>
-					Notes from ${notePage.number * notePage.numberOfElements} to ${notePage.number * notePage.numberOfElements + notePage.numberOfElements  } <small>
+					Notes from ${notePage.number * notePage.numberOfElements + 1} to ${notePage.number * notePage.numberOfElements + notePage.numberOfElements  } <small>
 						out of ${notePage.totalElements} note(s) </small>
 				</c:otherwise>
 			</c:choose>
@@ -29,7 +29,7 @@
 				<strong>Success!</strong> ${message} .
 			</div>
 		</c:if>
-		<c:forEach items="${notes }" var="note">
+		<c:forEach items="${notePage.content }" var="note">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h3 class="panel-title pull-left">
@@ -57,18 +57,36 @@
 				</div>
 			</div>
 		</c:forEach>
-
 		<hr>
 
 		<!-- Pager -->
-		<%-- <ul class="pager">
+		<ul class="pager">
+			<%-- <c:if test="${notePage.previous}">
+					<li class="previous"><a href="/notes?page=${notePage.number-1}&size=${notePage.numberOfElements}">&larr; Older</a></li>
+				</c:if>
+				<c:if test="${notePage.next}">
+					<li class="next"><a href="/notes?page=${notePage.number+1}&size=${notePage.numberOfElements}">Newer &rarr;</a></li>
+				</c:if> --%>
+
 			<li class="previous"><a
 				href="/notes?page=${notePage.number-1}&size=${notePage.numberOfElements}">&larr;
-					Older</a></li>
+					Previous</a></li>
+			<c:if test="${notePage.totalPages > 0 }">
+				<c:forEach begin="0" end="${notePage.totalPages-1}" var="varStatus" >
+					<li>
+					<c:if test="${varStatus == notePage.number}">
+						${varStatus}
+					</c:if>
+					<c:if test="${varStatus != notePage.number}">
+						<a href="/notes?page=${varStatus}&size=${notePage.numberOfElements}">${varStatus}</a>
+					</c:if>
+					</li>
+				</c:forEach>
+			</c:if>
 			<li class="next"><a
-				href="/notes?page=${notePage.number+1}&size=${notePage.numberOfElements}">Newer
+				href="/notes?page=${notePage.number+1}&size=${notePage.numberOfElements}">Next
 					&rarr;</a></li>
-		</ul> --%>
+		</ul>
 
 	</div>
 

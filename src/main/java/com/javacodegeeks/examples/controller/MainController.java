@@ -1,11 +1,18 @@
 package com.javacodegeeks.examples.controller;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,21 +55,28 @@ public class MainController {
 	
 	
 	static {
-		ReadTodoFileService.readNotesFromFile();
+		ReadTodoFileService.readNotesFromFile(false);
 	}
 	
 	
-	@RequestMapping(value = "/load-notes", method = RequestMethod.POST)
-    public String loadNotes(Model model, RedirectAttributes redirectAttrs) {
-		ReadTodoFileService.readNotesFromFile();
+	@RequestMapping(value = "/load-notes")
+    public String loadNotes(Model model, RedirectAttributes redirectAttrs, @RequestParam boolean original) {
+		ReadTodoFileService.readNotesFromFile(original);
 		
+		List<Note> allNotes = noteRepository.findAll();
+		List<Tag> allTags = tagRepocitory.findAll();
 		//since tag is not dependent on Note(i.e. no cascade set) tag should be persisted first
 		for(Tag tag: ReadTodoFileService.getAllTags()){
-			tagRepocitory.save(tag);
+			if(!allTags.contains(tag)){
+				tagRepocitory.save(tag);
+			}
 		}
 		
 		for(Note note: ReadTodoFileService.getNotes()){
-			noteRepository.save(note);
+			if(!allNotes.contains(note)){
+				noteRepository.save(note);
+			}
+			
 		}
 		redirectAttrs.addFlashAttribute("message", "Imported "+ReadTodoFileService.getNotes().size()+" note(s) successfully");
 		return "redirect:/notes";
@@ -95,10 +109,43 @@ public class MainController {
     }
     
     @RequestMapping(value="/notes",method = RequestMethod.GET)
-    public String notes(Model model){
-    	model.addAttribute("notes",notesService.getAllNotes());
+    public String notes(Model model,  @PageableDefault(size = 10) Pageable pageable){
+    	model.addAttribute("notePage",notesService.getAllNotes(pageable));
+        return "noteshome";
+    }
+   
+    
+    @RequestMapping(value="/export-notes",method = RequestMethod.GET)
+    public String exportNotes(){
+    	String file = "initialdata-notes.mtodo";
+    	try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(file))) {
+    		
+    		for(Note note: notesService.getAllNotes()){
+                writer.write(note.getTitle().replaceAll("<br/>", System.lineSeparator())+System.lineSeparator());
+                writer.write(note.getContent().replaceAll("<br/>", System.lineSeparator()));
+                writer.write("------------------------------------------------ "+System.lineSeparator());
+        	}
+
+        } catch (IOException e) {
+			e.printStackTrace();
+		} 
+        return "noteshome";
+    }
+
+	@RequestMapping(value="/udpate/note/{noteId}",method = RequestMethod.POST)
+    public @ResponseBody String updateNote(@PathVariable Long noteId, Model model, String content, String title){
+    	Note noteTobeUpdated = notesService.getNoteById(noteId);
+    	if(content != null & !content.isEmpty()){
+    		noteTobeUpdated.setContent(content);
+    	}
+    	if (title != null & !title.isEmpty()) {
+    		noteTobeUpdated.setTitle(title);
+		}
     	
-        return "notes";
+    	noteRepository.save(noteTobeUpdated);
+    	
+		return "Note with Id : "+noteTobeUpdated.getId()+"' has been successfully udpated";
+    	
     }
     
     @RequestMapping(value="/notes/search",method = RequestMethod.GET)

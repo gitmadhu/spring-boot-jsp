@@ -3,22 +3,6 @@
 
 			<!-- Blog Search Well -->
 			<div class="well">
-				<h4>Notes Search By Text</h4>
-				<form action="/notes/search">
-					<div class="input-group">
-						<input type="hidden" name="tag">
-						<input type="text" name="text" class="form-control" value="${text}" > <span
-							class="input-group-btn">
-							<button class="btn btn-default" type="submit">
-								<span class="glyphicon glyphicon-search"></span>
-							</button>
-						</span>
-					</div>
-				</form>
-				<!-- /.input-group -->
-			</div>
-			
-			<div class="well">
 				<h4>Notes Search by Tag</h4>
 				<form action="/notes/search">
 					<div class="input-group">

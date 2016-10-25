@@ -1,5 +1,7 @@
 package com.javacodegeeks.examples;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -30,14 +32,18 @@ public class WebAppInitializer{
 	public CommandLineRunner demo(CityRepository repository, UserRepository userRepo, NoteRepository noteRepo ) {
 		return (args) -> {
 			
-			userRepo.save(new User("madhu@customer.com", "123456", "madhu", "customer"));
-			userRepo.save(new User("madhu@admin.com", "123456", "madhu", "admin"));
+			Optional<User> madhu_customer = userRepo.findOneByEmail("madhu@customer.com");
+			if(!madhu_customer.isPresent()){
+				userRepo.save(new User("madhu@customer.com", "123456", "madhu", "customer"));
+			}
 			
-			final String content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate, voluptates, voluptas dolore ipsam cumque quam veniam accusantium laudantium adipisci architecto itaque dicta aperiam maiores provident id incidunt autem. Magni, ratione";
+			Optional<User> madhu_admin = userRepo.findOneByEmail("madhu@admin.com");
+			
+			if(!madhu_admin.isPresent()){
+				userRepo.save(new User("madhu@admin.com", "123456", "madhu", "admin"));
+			}
 			
 			//loadData(noteRepo);
-		
-			
 			
 			// save a couple of customers
 			repository.save(new City("Hyderabad", "India"));
@@ -74,7 +80,7 @@ public class WebAppInitializer{
 
 	private void loadData(NoteRepository noteRepository) {
 		
-		ReadTodoFileService.readNotesFromFile();
+		ReadTodoFileService.readNotesFromFile(false);
 		for(Note note: ReadTodoFileService.getNotes()){
 			noteRepository.save(note);
 			log.info("notes are loaded to database...................");

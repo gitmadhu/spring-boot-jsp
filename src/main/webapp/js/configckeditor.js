@@ -1,40 +1,54 @@
 $(function() {
-			$("#editor1").html($(this).html());
-			var editor = CKEDITOR.replace('editor1')
 
-			editor.on('change', function(evt) {
-				// getData() returns CKEditor's HTML content.
-				$("#dataId").html(evt.editor.getData());
-			});
-			
-			editor.config.allowedContent = true
+	$("#UdpateNoteButton").click(function(event) {
+		formUrl = $("#updateNoteForm").attr("action");
+		$.post(formUrl, $("#updateNoteForm").serialize(),
 
-			var writer = editor.dataProcessor.writer;
-
-			// The character sequence to use for every indentation step.
-			writer.indentationChars = '\t';
-
-			// The way to close self closing tags, like <br />.
-			writer.selfClosingEnd = ' />';
-
-			// The character sequence to be used for line breaks.
-			writer.lineBreakChars = '\n';
-
-			// The writing rules for the <p> tag.
-			writer.setRules('p', {
-				// Indicates that this tag causes indentation on line breaks inside of it.
-				indent : true,
-
-				// Inserts a line break before the <p> opening tag.
-				breakBeforeOpen : true,
-
-				// Inserts a line break after the <p> opening tag.
-				breakAfterOpen : true,
-
-				// Inserts a line break before the </p> closing tag.
-				breakBeforeClose : false,
-
-				// Inserts a line break after the </p> closing tag.
-				breakAfterClose : true
-			});
+		function(data) {
+			$('#UpdateMessage').html(data);
+			$('#UpdateMessage').show();
 		});
+
+	});
+	
+	$('#noteTitle').change(function () {
+		var noteId = $("#noteId").text();
+	    $("#note-title-"+noteId).html($("#noteTitle").val());
+	});
+	
+});
+
+function loadCkeditor(noteId) {
+
+	var contentId = "#blog-content-"+noteId;
+	var tittleId = "#note-title-"+noteId;
+
+	//for content 
+	$("#editor1").html($(contentId).html());
+	$("#noteId").html(noteId);
+
+	var editorName = "editor1";
+
+	var editor = CKEDITOR.instances[editorName];
+	if (editor) {
+		editor.destroy(true);
+		$("#editor1").html($(contentId).html());
+	}
+	editor = CKEDITOR.replace(editorName);
+
+	editor.config.allowedContent = true;
+	editor.config.enterMode = CKEDITOR.ENTER_BR;
+
+	editor.on('change', function(evt) {
+		// getData() returns CKEditor's HTML content.
+		$(contentId).html(evt.editor.getData());
+		$('#noteContent').attr('value', evt.editor.getData());
+	});
+	
+	//for title
+	$("#noteTitle").attr('value',$(tittleId).text());
+	
+	$('#updateNoteForm').attr('action', '/udpate/note/' + noteId);
+	
+	return true;
+}

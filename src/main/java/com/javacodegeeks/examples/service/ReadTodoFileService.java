@@ -56,10 +56,13 @@ public class ReadTodoFileService {
 
 	}
 
-	public static void readNotesFromFile() {
+	public static void readNotesFromFile(boolean loadOriginal) {
 		
 		notes.clear();
 		String fileName = "D:\\invenio\\todo\\mJava\\spring\\springboot-angularjs-jsp\\springboot-angularjs\\src\\main\\resources\\m.txt";
+		if(!loadOriginal){
+			fileName = "initialdata-notes.mtodo";
+		}
 
 		try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
 			

@@ -1,10 +1,13 @@
 package com.javacodegeeks.examples.service;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.javacodegeeks.examples.model.Note;
@@ -18,11 +21,21 @@ public class DataBaseNotesService implements NotesService {
 	NoteRepository noteRepository;
 	
 	@Autowired
-	TagRepocitory tagRepository;
+	TagRepocitory tagRepository;  
 	
 	@Override
-	public Collection<Note> getAllNotes() {
-		return noteRepository.findAll();
+	public Page<Note> getAllNotes(Pageable pageable) {
+		if(null == pageable)
+			pageable = createPageRequest();
+		return noteRepository.findAll(pageable);
+	}
+	
+	private Pageable createPageRequest() {
+	    return new PageRequest(0, 
+	            10, 
+	            new Sort(Sort.Direction.DESC, "date")
+	                    .and(new Sort(Sort.Direction.ASC, "title"))
+	    );
 	}
 	
 	public Collection<Note> getAllNotesByForTag(String tag){
@@ -44,6 +57,11 @@ public class DataBaseNotesService implements NotesService {
 	@Override
 	public Collection<Note> searchNotesByText(String text) {
 		return noteRepository.findAllByContentContainsIgnoreCase(text);
+	}
+
+	@Override
+	public Collection<Note> getAllNotes() {
+		return noteRepository.findAll();
 	}
 
 }

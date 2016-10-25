@@ -22,18 +22,19 @@
 <script src="/js/ckeditor/ckeditor.js"></script>
 </head>
 <body>
-	<form id="importForm" action="/load-notes" method="post">
+	<form id="importForm" action="/load-notes" method="get">
 		<input type="hidden" name="${_csrf.parameterName}"
 			value="${_csrf.token}" />
+		<input type="hidden" name="original" value="true" >
 	</form>
 	<div class="blog-masthead">
 		<div class="container">
 			<nav class="blog-nav">
-				<a class="blog-nav-item active" href="/users">Home</a> <a
-					class="blog-nav-item" href="/notes">Notes</a> <a
-					class="blog-nav-item" href="#" onclick="loadNotes()">Import
-					Notes</a> <a class="blog-nav-item" href="#">New hires</a> <a
-					class="blog-nav-item" href="#">About</a>
+				<a class="blog-nav-item active" href="/users">Home</a> 
+				<a class="blog-nav-item" href="/notes">Notes</a> 
+				<a class="blog-nav-item" href="#" onclick="loadNotes()">Import Notes</a> 
+					<a class="blog-nav-item" href="/export-notes">Export Notes</a> 
+					<a class="blog-nav-item" href="#">About</a>
 				<ul class="nav navbar-nav navbar-right ">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
@@ -200,7 +201,7 @@
 				// getData() returns CKEditor's HTML content.
 				$("#dataId").html(evt.editor.getData());
 			});
-			
+
 			editor.config.allowedContent = true
 
 			var writer = editor.dataProcessor.writer;

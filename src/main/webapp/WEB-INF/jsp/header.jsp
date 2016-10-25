@@ -13,10 +13,12 @@
 
 	<%-- TODO: fix css issue --%>
 	<link href="/css/prism.css" rel="stylesheet">
+	<script src="/js/ckeditor/ckeditor.js"></script>
 	
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.6/css/bootstrap.min.css">
 	<link href="/css/blog-home.css" rel="stylesheet">
+	<link href="/css/mtodo.css" rel="stylesheet">
 	
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

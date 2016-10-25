@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <jsp:include page="headerDP.jsp" />
 
 	<div class="row">
@@ -9,7 +10,9 @@
 			<!-- Blog Post -->
 
 			<!-- Title -->
-			<h1>${note.title}</h1>
+			<h1 id="note-title-${note.id}" >${note.title}</h1>
+			<button type="button" class="btn btn-default pull-right" onclick="return loadCkeditor(${note.id});" data-toggle="modal"
+				data-target="#myModal">Edit</button>
 
 			<!-- Author -->
 			<p class="lead">
@@ -32,11 +35,30 @@
 			<hr>
 
 			<!-- Post Content -->
-			${note.content}
+			<div id="blog-content-${note.id}" > ${note.content} </div>
 			<c:forEach items="${note.tags }" var="tag">
 				<a href="/notes/tag/${tag.name}#disqus_thread" class="btn btn-info btn-xs">${ tag.name}</a>
 			</c:forEach>
 
+			<hr>
+			<div class="row">
+			<c:forEach items="${note.tags}" var="firstTag" begin="0" end="0" >
+				<c:set var="endVar" value="${fn:length(firstTag.notes) < 2? fn:length(firstTag.notes): 2}" /> 
+				<c:forEach items="${firstTag.notes}" var="relNote" begin="0" end="${endVar}" >
+					<c:if test="${relNote.id != note.id }"> 
+						<div class="col-sm-6 col-md-4">
+						    <div class="thumbnail">
+						      <div class="caption">
+						        <h3>${relNote.title}</h3>
+						        <p>... </p>
+						        <p><a href="/note/${relNote.id}" class="btn btn-primary" role="button">Read on..</a></p>
+						      </div>
+						    </div>
+						  </div>
+					 </c:if> 
+				</c:forEach>
+			</c:forEach>
+			</div>
 			<hr>
 			<!-- Blog Comments -->
 			<jsp:include page="disqus.jsp" />
